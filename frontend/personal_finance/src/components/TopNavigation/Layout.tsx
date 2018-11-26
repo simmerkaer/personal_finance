@@ -42,7 +42,7 @@ const styles = (theme: Theme) => createStyles({
 const ListItemLink = (text: string, to: string, icon: JSX.Element) => {
   const renderLink = (itemProps: any) => <Link to={to} {...itemProps} />;
   return (
-    <ListItem button={true} component={renderLink}>
+    <ListItem button={true} component={renderLink} key={text}>
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText primary={text} />
     </ListItem>
