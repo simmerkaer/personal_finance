@@ -1,4 +1,5 @@
 import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -15,6 +16,8 @@ import React from 'react';
 import { Link, Route } from 'react-router-dom';
 import BudgetPage from '../../pages/BudgetPage/BudgetPage';
 import WelcomePage from '../../pages/WelcomePage/WelcomePage';
+import SignIn from '../SignIn/SignIn';
+import SignOut from '../SignIn/SignOut';
 
 const drawerWidth = 240;
 
@@ -35,6 +38,11 @@ const styles = (theme: Theme) => createStyles({
   },
   root: {
     display: 'flex',
+    flexGrow: 1
+  },
+  grow: {
+    flexGrow: 1,
+    textAlign: "left"
   },
   toolbar: theme.mixins.toolbar,
 });
@@ -46,19 +54,25 @@ const ListItemLink = (text: string, to: string, icon: JSX.Element) => {
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText primary={text} />
     </ListItem>
-  )
+  );
+};
+
+interface LayoutProps extends WithStyles<typeof styles> {
+  authUser?: any;
 }
 
-function ClippedDrawer(props: WithStyles<typeof styles>) {
-  const { classes } = props;
+function Layout(props: LayoutProps) {
+  const { classes, authUser } = props;
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap={true}>
-            Clipped drawer
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            News
           </Typography>
+          {authUser && <SignOut />}
+          {!authUser && <SignIn />}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -93,4 +107,4 @@ function ClippedDrawer(props: WithStyles<typeof styles>) {
   );
 }
 
-export default withStyles(styles)(ClippedDrawer);
+export default withStyles(styles)(Layout);

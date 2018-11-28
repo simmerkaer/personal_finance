@@ -5,6 +5,9 @@
     "tslint-config-prettier"
   ],
   "rules": {
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "interface-name": false,
+    "semicolon": true,
+    "no-angle-bracket-type-assertion": false
   }
 }
