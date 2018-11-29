@@ -1,8 +1,7 @@
 import React, { ComponentType } from "react";
 import Firebase, { withFirebase } from "./";
-import { compose } from "recompose";
 import { withRouter } from "react-router-dom";
-import { RouterProps, RouteComponentProps, Redirect } from "react-router";
+import { RouteComponentProps, Redirect } from "react-router";
 
 interface WithAuthorizationProps extends RouteComponentProps {
   firebase: Firebase;
