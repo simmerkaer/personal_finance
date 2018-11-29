@@ -21,8 +21,11 @@ import React from "react";
 import { Link, Route } from "react-router-dom";
 import BudgetPage from "../../pages/BudgetPage/BudgetPage";
 import WelcomePage from "../../pages/WelcomePage/WelcomePage";
+import { withAuthentication } from "../../session";
+import AuthUserContext from '../../session/context';
 import SignIn from "../SignIn/SignIn";
 import SignOut from "../SignIn/SignOut";
+import Navigation from "./Navigation";
 
 const drawerWidth = 240;
 
@@ -53,22 +56,11 @@ const styles = (theme: Theme) =>
     toolbar: theme.mixins.toolbar
   });
 
-const ListItemLink = (text: string, to: string, icon: JSX.Element) => {
-  const renderLink = (itemProps: any) => <Link to={to} {...itemProps} />;
-  return (
-    <ListItem button={true} component={renderLink} key={text}>
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText primary={text} />
-    </ListItem>
-  );
-};
-
 interface LayoutProps extends WithStyles<typeof styles> {
-  authUser?: any;
 }
 
 function Layout(props: LayoutProps) {
-  const { classes, authUser } = props;
+  const { classes } = props;
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -77,8 +69,10 @@ function Layout(props: LayoutProps) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             News
           </Typography>
-          {authUser && <SignOut />}
-          {!authUser && <SignIn />}
+          <AuthUserContext.Consumer>
+            {authUser =>
+              authUser ? <SignOut /> : <SignIn />}
+          </AuthUserContext.Consumer>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -89,22 +83,7 @@ function Layout(props: LayoutProps) {
         }}
       >
         <div className={classes.toolbar} />
-        <List>
-          {["Welcome", "Budget"].map((text, index) =>
-            ListItemLink(text, `/${text}`, <MailIcon />)
-          )}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button={true} key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <Navigation />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
@@ -115,4 +94,4 @@ function Layout(props: LayoutProps) {
   );
 }
 
-export default withStyles(styles)(Layout);
+export default withAuthentication(withStyles(styles)(Layout));

@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 import Firebase from './firebase';
 
-const FirebaseContext = React.createContext({} as Firebase);
+const FirebaseContext = React.createContext<Firebase | undefined>(undefined);
 
 export default FirebaseContext;

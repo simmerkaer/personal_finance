@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/TopNavigation/Layout";
 import Firebase from './firebase/firebase';
+import { withAuthentication } from './session';
 
 interface AppProps {
   firebase: Firebase;
@@ -14,29 +15,13 @@ interface AppState {
 }
 
 class App extends Component<AppProps, AppState> {
-  constructor(props: any) {
-    super(props);
-
-    this.state = {
-      authUser: null,
-    };
-  }
-
-  public componentDidMount() {
-    this.props.firebase.auth.onAuthStateChanged(authUser => {
-      authUser
-        ? this.setState({ authUser })
-        : this.setState({ authUser: null });
-    });
-  }
-
   public render() {
     return (
       <>
         <CssBaseline />
         <Router>
           <div className="App">
-            <Layout authUser={this.state.authUser} />
+            <Layout />
           </div>
         </Router>
       </>
@@ -44,4 +29,4 @@ class App extends Component<AppProps, AppState> {
   }
 }
 
-export default App;
+export default withAuthentication(App);
