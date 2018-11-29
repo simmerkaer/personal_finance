@@ -8,6 +8,8 @@
     "object-literal-sort-keys": false,
     "interface-name": false,
     "semicolon": true,
-    "no-angle-bracket-type-assertion": false
+    "no-angle-bracket-type-assertion": false,
+    "no-console": false,
+    "curly": false
   }
 }

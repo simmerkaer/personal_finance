@@ -1,17 +1,7 @@
 import * as React from 'react';
+import withAuthorization from '../../firebase/withAuthorization';
 
-export default class WelcomePage extends React.Component<any, any> {
-  public componentDidMount() {
-    const db = this.context;
-    // tslint:disable-next-line:no-console
-    console.log(db)
-    // db.createUser({
-    //   first: "test",
-    //   last: "test",
-    //   born: 1000
-    // })
-
-  }
+class WelcomePage extends React.Component<any, any> {
   public render() {
     return (
       <div>
@@ -20,3 +10,4 @@ export default class WelcomePage extends React.Component<any, any> {
     );
   }
 }
+export default withAuthorization(WelcomePage);

@@ -31,7 +31,7 @@ class Navigation extends React.Component<any, any> {
 
     const NavigationNonAuth = () => (
       <List>
-        {["Please sign in"].map((text, index) => (
+        {["Welcome Anon!"].map((text, index) => (
           <ListItem button={true} key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

@@ -1,10 +1,13 @@
 import firebase, { firestore } from "firebase";
+import { User } from '../models/user';
 
 const config = {
   apiKey: "AIzaSyAFTpHYAgEZ6UxgAs4oJZq-N5cYtxXcIa4",
   authDomain: "personal-finance-8a87d.firebaseapp.com",
   projectId: "personal-finance-8a87d",
 };
+
+const settings = { timestampsInSnapshots: true };
 
 class Firebase {
   public db: firebase.firestore.Firestore;
@@ -13,6 +16,7 @@ class Firebase {
   constructor() {
     const app = firebase.initializeApp(config);
     this.db = app.firestore();
+    this.db.settings(settings);
     this.auth = app.auth();
   }
 
@@ -24,11 +28,18 @@ class Firebase {
     this.auth.signOut()
 
   // *** User API *** 
+  public createUser = (user: User) =>
+    this.db
+      .collection("users")
+      .doc(user.uid)
+      .set(user)
 
-  public createUser = (user: any) => this.db.collection("users")
-    .add(user)
-    // tslint:disable-next-line:no-console
-    .catch(error => console.log(error))
+  public getUser = (uid: string) =>
+    this.db
+      .collection("users")
+      .doc(uid)
+      .get()
+      .then(doc => doc.data())
 }
 
 export default Firebase;

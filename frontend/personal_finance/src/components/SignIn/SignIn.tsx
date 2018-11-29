@@ -8,9 +8,21 @@ interface SignInProps {
 }
 
 class SignIn extends React.Component<SignInProps, any> {
-  public signIn = () => {
-    this.props.firebase.doSignInWithGoogle();
-    // TODO: catch error
+  public signIn = async () => {
+    const { firebase } = this.props;
+    const userCred = await firebase.doSignInWithGoogle();
+    const user = userCred.user;
+    if (!user) return; // Check this case
+
+    const existingUser = await firebase.getUser(user.uid);
+
+    // If the user doesnt already exist we create it
+    if (!existingUser)
+      firebase.createUser({
+        uid: user.uid,
+        displayName: user.displayName || "",
+        email: user.email || ""
+      });
   }
 
   public render() {

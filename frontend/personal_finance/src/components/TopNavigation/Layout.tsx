@@ -20,6 +20,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import React from "react";
 import { Link, Route } from "react-router-dom";
 import BudgetPage from "../../pages/BudgetPage/BudgetPage";
+import UnauthorizedPage from '../../pages/Unauthorized/UnauthorizedPage';
 import WelcomePage from "../../pages/WelcomePage/WelcomePage";
 import { withAuthentication } from "../../session";
 import AuthUserContext from '../../session/context';
@@ -87,6 +88,7 @@ function Layout(props: LayoutProps) {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <Route path="/Unauthorized" component={UnauthorizedPage} />
         <Route path="/Welcome" component={WelcomePage} />
         <Route path="/Budget" component={BudgetPage} />
       </main>
