@@ -10,7 +10,7 @@ interface SignInProps extends RouteComponentProps {
 
 class SignIn extends React.Component<SignInProps, any> {
   public signIn = async () => {
-    const { firebase } = this.props;
+    const { firebase, history } = this.props;
     const userCred = await firebase.doSignInWithGoogle();
     const user = userCred.user;
     if (!user) return; // Check this case
@@ -25,7 +25,7 @@ class SignIn extends React.Component<SignInProps, any> {
         email: user.email || ""
       });
 
-    this.props.history.push("/Welcome");
+    history.push("/Welcome");
   };
 
   public render() {
