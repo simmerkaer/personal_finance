@@ -1,13 +1,23 @@
-import * as React from 'react';
-import withAuthorization from '../../firebase/withAuthorization';
+import * as React from "react";
+import withAuthorization from "../../firebase/withAuthorization";
+import { withAuthUser } from "../../session";
+import Avatar from "@material-ui/core/Avatar";
 
-class WelcomePage extends React.Component<any, any> {
+interface WelcomePageProps {
+  authUser: firebase.User | null;
+}
+
+class WelcomePage extends React.Component<WelcomePageProps, any> {
   public render() {
+    const { authUser } = this.props;
+    if (!authUser) return null;
+    const photoUrl = authUser.photoURL ? authUser.photoURL : "";
     return (
-      <div>
-        Welcome!
-      </div>
+      <>
+        <div>Welcome {authUser.email}!</div>
+        <Avatar alt={authUser.displayName} src={photoUrl} />
+      </>
     );
   }
 }
-export default withAuthorization(WelcomePage);
+export default withAuthorization(withAuthUser(WelcomePage));

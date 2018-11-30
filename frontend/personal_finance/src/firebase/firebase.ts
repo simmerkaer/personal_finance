@@ -1,10 +1,10 @@
 import firebase, { firestore } from "firebase";
-import { User } from '../models/user';
+import { User } from "../models/user";
 
 const config = {
   apiKey: "AIzaSyAFTpHYAgEZ6UxgAs4oJZq-N5cYtxXcIa4",
   authDomain: "personal-finance-8a87d.firebaseapp.com",
-  projectId: "personal-finance-8a87d",
+  projectId: "personal-finance-8a87d"
 };
 
 const settings = { timestampsInSnapshots: true };
@@ -18,28 +18,28 @@ class Firebase {
     this.db = app.firestore();
     this.db.settings(settings);
     this.auth = app.auth();
+    this.auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
   }
 
-  // *** Auth API *** 
+  // *** Auth API ***
   public doSignInWithGoogle = () =>
-    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider)
+    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
-  public doSignOut = () =>
-    this.auth.signOut()
+  public doSignOut = () => this.auth.signOut();
 
-  // *** User API *** 
+  // *** User API ***
   public createUser = (user: User) =>
     this.db
       .collection("users")
       .doc(user.uid)
-      .set(user)
+      .set(user);
 
   public getUser = (uid: string) =>
     this.db
       .collection("users")
       .doc(uid)
       .get()
-      .then(doc => doc.data())
+      .then(doc => doc.data());
 }
 
 export default Firebase;

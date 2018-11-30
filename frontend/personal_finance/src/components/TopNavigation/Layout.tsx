@@ -1,12 +1,6 @@
 import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import {
   createStyles,
   Theme,
@@ -15,15 +9,13 @@ import {
 } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import MailIcon from "@material-ui/icons/Mail";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import React from "react";
-import { Link, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import BudgetPage from "../../pages/BudgetPage/BudgetPage";
-import UnauthorizedPage from '../../pages/Unauthorized/UnauthorizedPage';
+import UnauthorizedPage from "../../pages/Unauthorized/UnauthorizedPage";
 import WelcomePage from "../../pages/WelcomePage/WelcomePage";
 import { withAuthentication } from "../../session";
-import AuthUserContext from '../../session/context';
+import AuthUserContext from "../../session/context";
 import SignIn from "../SignIn/SignIn";
 import SignOut from "../SignIn/SignOut";
 import Navigation from "./Navigation";
@@ -57,8 +49,7 @@ const styles = (theme: Theme) =>
     toolbar: theme.mixins.toolbar
   });
 
-interface LayoutProps extends WithStyles<typeof styles> {
-}
+interface LayoutProps extends WithStyles<typeof styles> {}
 
 function Layout(props: LayoutProps) {
   const { classes } = props;
@@ -71,8 +62,7 @@ function Layout(props: LayoutProps) {
             News
           </Typography>
           <AuthUserContext.Consumer>
-            {authUser =>
-              authUser ? <SignOut /> : <SignIn />}
+            {authUser => (authUser ? <SignOut /> : <SignIn />)}
           </AuthUserContext.Consumer>
         </Toolbar>
       </AppBar>

@@ -1,13 +1,17 @@
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { withAuthentication } from '../../session';
-import AuthUserContext from '../../session/context';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import AccountIcon from "@material-ui/icons/AccountBox";
+import SettingsIcon from "@material-ui/icons/Settings";
+import BudgetIcon from "@material-ui/icons/AttachMoney";
+import InvestIcon from "@material-ui/icons/ShowChart";
+import * as React from "react";
+import { Link } from "react-router-dom";
+import { withAuthentication } from "../../session";
+import AuthUserContext from "../../session/context";
+import Divider from "@material-ui/core/Divider";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 const ListItemLink = (text: string, to: string, icon: JSX.Element) => {
   const renderLink = (itemProps: any) => <Link to={to} {...itemProps} />;
@@ -19,14 +23,38 @@ const ListItemLink = (text: string, to: string, icon: JSX.Element) => {
   );
 };
 
+interface Menu {
+  title: string;
+  icon: JSX.Element;
+}
+
+const accountMenus: Menu[] = [
+  { title: "My Profile", icon: <AccountIcon /> },
+  { title: "Settings", icon: <SettingsIcon /> }
+];
+
+const budgetMenus: Menu[] = [
+  { title: "My Economy", icon: <BudgetIcon /> },
+  { title: "Investings", icon: <InvestIcon /> }
+];
 class Navigation extends React.Component<any, any> {
   public render() {
     const NavigationAuth = () => (
-      <List>
-        {["Welcome", "Budget"].map((text, index) =>
-          ListItemLink(text, `/${text}`, <MailIcon />)
-        )}
-      </List>
+      <>
+        <List>
+          <ListSubheader>Account</ListSubheader>
+          {accountMenus.map((menu, index) =>
+            ListItemLink(menu.title, `/${menu.title}`, menu.icon)
+          )}
+        </List>
+        <Divider />
+        <List>
+          <ListSubheader>Economy</ListSubheader>
+          {budgetMenus.map((menu, index) =>
+            ListItemLink(menu.title, `/${menu.title}`, menu.icon)
+          )}
+        </List>
+      </>
     );
 
     const NavigationNonAuth = () => (
@@ -34,7 +62,7 @@ class Navigation extends React.Component<any, any> {
         {["Welcome Anon!"].map((text, index) => (
           <ListItem button={true} key={text}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {index % 2 === 0 ? <SettingsIcon /> : <AccountIcon />}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
@@ -44,8 +72,7 @@ class Navigation extends React.Component<any, any> {
 
     return (
       <AuthUserContext.Consumer>
-        {authUser =>
-          authUser ? <NavigationAuth /> : <NavigationNonAuth />}
+        {authUser => (authUser ? <NavigationAuth /> : <NavigationNonAuth />)}
       </AuthUserContext.Consumer>
     );
   }
