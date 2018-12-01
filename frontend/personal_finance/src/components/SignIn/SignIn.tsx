@@ -1,8 +1,8 @@
 import Button from "@material-ui/core/Button";
 import * as React from "react";
+import { RouteComponentProps, withRouter } from "react-router";
 import { withFirebase } from "../../firebase";
 import Firebase from "../../firebase/firebase";
-import { RouteComponentProps, withRouter } from "react-router";
 
 interface SignInProps extends RouteComponentProps {
   firebase: Firebase;
@@ -26,7 +26,7 @@ class SignIn extends React.Component<SignInProps, any> {
       });
 
     history.push("/Welcome");
-  };
+  }
 
   public render() {
     return (

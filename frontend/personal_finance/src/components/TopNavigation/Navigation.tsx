@@ -1,17 +1,17 @@
+import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
 import AccountIcon from "@material-ui/icons/AccountBox";
-import SettingsIcon from "@material-ui/icons/Settings";
 import BudgetIcon from "@material-ui/icons/AttachMoney";
+import SettingsIcon from "@material-ui/icons/Settings";
 import InvestIcon from "@material-ui/icons/ShowChart";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { withAuthentication } from "../../session";
 import AuthUserContext from "../../session/context";
-import Divider from "@material-ui/core/Divider";
-import ListSubheader from "@material-ui/core/ListSubheader";
 
 const ListItemLink = (text: string, to: string, icon: JSX.Element) => {
   const renderLink = (itemProps: any) => <Link to={to} {...itemProps} />;
