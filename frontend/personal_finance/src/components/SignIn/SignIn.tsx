@@ -25,7 +25,7 @@ class SignIn extends React.Component<SignInProps, any> {
         email: user.email || ""
       });
 
-    history.push("/Welcome");
+    history.push("/profile");
   }
 
   public render() {

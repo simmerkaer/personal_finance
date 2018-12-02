@@ -6,6 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import AccountIcon from "@material-ui/icons/AccountBox";
 import BudgetIcon from "@material-ui/icons/AttachMoney";
+import PersonIcon from "@material-ui/icons/Person";
 import SettingsIcon from "@material-ui/icons/Settings";
 import InvestIcon from "@material-ui/icons/ShowChart";
 import * as React from "react";
@@ -25,17 +26,18 @@ const ListItemLink = (text: string, to: string, icon: JSX.Element) => {
 
 interface Menu {
   title: string;
+  path?: string;
   icon: JSX.Element;
 }
 
 const accountMenus: Menu[] = [
-  { title: "My Profile", icon: <AccountIcon /> },
-  { title: "Settings", icon: <SettingsIcon /> }
+  { title: "My Profile", path: "profile", icon: <AccountIcon /> },
+  { title: "Settings", path: "settings", icon: <SettingsIcon /> }
 ];
 
 const budgetMenus: Menu[] = [
-  { title: "My Economy", icon: <BudgetIcon /> },
-  { title: "Investings", icon: <InvestIcon /> }
+  { title: "My Economy", path: "economy", icon: <BudgetIcon /> },
+  { title: "Investings", path: "investings", icon: <InvestIcon /> }
 ];
 class Navigation extends React.Component<any, any> {
   public render() {
@@ -44,14 +46,14 @@ class Navigation extends React.Component<any, any> {
         <List>
           <ListSubheader>Account</ListSubheader>
           {accountMenus.map((menu, index) =>
-            ListItemLink(menu.title, `/${menu.title}`, menu.icon)
+            ListItemLink(menu.title, `/${menu.path}`, menu.icon)
           )}
         </List>
         <Divider />
         <List>
           <ListSubheader>Economy</ListSubheader>
-          {budgetMenus.map((menu, index) =>
-            ListItemLink(menu.title, `/${menu.title}`, menu.icon)
+          {budgetMenus.map((menu) =>
+            ListItemLink(menu.title, `/${menu.path}`, menu.icon)
           )}
         </List>
       </>
@@ -60,12 +62,7 @@ class Navigation extends React.Component<any, any> {
     const NavigationNonAuth = () => (
       <List>
         {["Welcome Anon!"].map((text, index) => (
-          <ListItem button={true} key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <SettingsIcon /> : <AccountIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+         ListItemLink(text, `/unauthorized`, <PersonIcon />)
         ))}
       </List>
     );

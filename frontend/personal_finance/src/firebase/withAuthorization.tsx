@@ -24,7 +24,7 @@ const withAuthorization = <P extends object>(Component: ComponentType<P>) => {
     public componentDidMount() {
       this.props.firebase.auth.onAuthStateChanged(authUser => {
         if (!authUser) {
-          this.setState({ redirect: "/Unauthorized" });
+          this.setState({ redirect: "/unauthorized" });
         }
       });
     }

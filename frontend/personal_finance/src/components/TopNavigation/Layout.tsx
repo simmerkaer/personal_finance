@@ -49,7 +49,7 @@ const styles = (theme: Theme) =>
     toolbar: theme.mixins.toolbar
   });
 
-interface LayoutProps extends WithStyles<typeof styles> {}
+interface LayoutProps extends WithStyles<typeof styles> { }
 
 function Layout(props: LayoutProps) {
   const { classes } = props;
@@ -59,7 +59,7 @@ function Layout(props: LayoutProps) {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            News
+            Personal Finance
           </Typography>
           <AuthUserContext.Consumer>
             {authUser => (authUser ? <SignOut /> : <SignIn />)}
@@ -78,9 +78,9 @@ function Layout(props: LayoutProps) {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Route path="/Unauthorized" component={UnauthorizedPage} />
-        <Route path="/Welcome" component={WelcomePage} />
-        <Route path="/Budget" component={BudgetPage} />
+        <Route path="/unauthorized" component={UnauthorizedPage} />
+        <Route path="/profile" component={WelcomePage} />
+        <Route path="/economy" component={BudgetPage} />
       </main>
     </div>
   );
