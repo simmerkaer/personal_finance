@@ -11,7 +11,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { Route } from "react-router-dom";
-import BudgetPage from "../../pages/BudgetPage/BudgetPage";
+import EconomyPage from "../../pages/EconomyPage/EconomyPage";
 import UnauthorizedPage from "../../pages/Unauthorized/UnauthorizedPage";
 import WelcomePage from "../../pages/WelcomePage/WelcomePage";
 import { withAuthentication } from "../../session";
@@ -49,7 +49,7 @@ const styles = (theme: Theme) =>
     toolbar: theme.mixins.toolbar
   });
 
-interface LayoutProps extends WithStyles<typeof styles> { }
+interface LayoutProps extends WithStyles<typeof styles> {}
 
 function Layout(props: LayoutProps) {
   const { classes } = props;
@@ -80,7 +80,7 @@ function Layout(props: LayoutProps) {
         <div className={classes.toolbar} />
         <Route path="/unauthorized" component={UnauthorizedPage} />
         <Route path="/profile" component={WelcomePage} />
-        <Route path="/economy" component={BudgetPage} />
+        <Route path="/economy" component={EconomyPage} />
       </main>
     </div>
   );

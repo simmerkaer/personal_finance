@@ -13,7 +13,7 @@ const withAuthUser = <P extends InjectedProps>(Component: ComponentType<P>) =>
     public render() {
       return (
         <AuthUserContext.Consumer>
-          {authUser => <Component authUser={authUser} />}
+          {authUser => <Component authUser={authUser} {...this.props} />}
         </AuthUserContext.Consumer>
       );
     }
