@@ -1,6 +1,8 @@
-import React, { ComponentType } from 'react';
-import Firebase from './firebase';
+import React, { ComponentType } from "react";
+import Firebase from "./firebase";
 
-const FirebaseContext = React.createContext<Firebase | undefined>(undefined);
+export const FirebaseSingleton = new Firebase();
+
+const FirebaseContext = React.createContext<Firebase>(FirebaseSingleton);
 
 export default FirebaseContext;

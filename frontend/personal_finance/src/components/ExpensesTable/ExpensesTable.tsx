@@ -1,6 +1,10 @@
 import * as React from "react";
 import Paper from "@material-ui/core/Paper";
-import { EditingState } from "@devexpress/dx-react-grid";
+import {
+  EditingState,
+  Column,
+  DataTypeProvider
+} from "@devexpress/dx-react-grid";
 import {
   Grid,
   Table,
@@ -8,16 +12,38 @@ import {
   TableEditRow,
   TableEditColumn
 } from "@devexpress/dx-react-grid-material-ui";
+import { withFirebase } from "../../firebase";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { InjectedFirebaseProps } from "../../firebase/withFirebase";
 
 const getRowId = row => row.id;
 
-interface ExpensesTableState {
-  columns: any;
-  rows: any;
+export interface Row {
+  id: number;
+  name: string;
+  money: string;
 }
 
-export default class ExpensesTable extends React.PureComponent<
-  {},
+interface ExpensesTableProps extends InjectedFirebaseProps {
+  rows: Row[];
+  loading: boolean;
+  commitChanges: any;
+}
+
+interface ExpensesTableState {
+  columns: Column[];
+}
+
+const CurrencyFormatter = ({ value }) => (
+  <b style={{ color: "darkblue" }}>{value} kr.</b>
+);
+
+const CurrencyTypeProvider = props => (
+  <DataTypeProvider formatterComponent={CurrencyFormatter} {...props} />
+);
+
+class ExpensesTable extends React.Component<
+  ExpensesTableProps,
   ExpensesTableState
 > {
   constructor(props) {
@@ -33,44 +59,23 @@ export default class ExpensesTable extends React.PureComponent<
           name: "money",
           title: "Money"
         }
-      ],
-      rows: []
+      ]
     };
   }
 
-  commitChanges = ({ added, changed, deleted }) => {
-    let { rows } = this.state;
-    if (added) {
-      const startingAddedId =
-        rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-      rows = [
-        ...rows,
-        ...added.map((row, index) => ({
-          id: startingAddedId + index,
-          ...row
-        }))
-      ];
-    }
-    if (changed) {
-      rows = rows.map(row =>
-        changed[row.id] ? { ...row, ...changed[row.id] } : row
-      );
-    }
-    if (deleted) {
-      const deletedSet = new Set(deleted);
-      rows = rows.filter(row => !deletedSet.has(row.id));
-    }
-    this.setState({ rows });
-  };
-
   render() {
-    const { rows, columns } = this.state;
-
+    const { rows, loading, commitChanges } = this.props;
+    const { columns } = this.state;
     return (
       <Paper>
         <Grid rows={rows} columns={columns} getRowId={getRowId}>
-          <EditingState onCommitChanges={this.commitChanges} />
-          <Table />
+          <EditingState onCommitChanges={commitChanges} />
+          <CurrencyTypeProvider for={["money"]} />
+          <Table
+            noDataCellComponent={() => (
+              <LoadingState columnCount={columns.length} loading={loading} />
+            )}
+          />
           <TableHeaderRow />
           <TableEditRow />
           <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
@@ -79,3 +84,14 @@ export default class ExpensesTable extends React.PureComponent<
     );
   }
 }
+
+export default withFirebase(ExpensesTable);
+
+const LoadingState = ({ loading, columnCount }) => (
+  <td
+    colSpan={columnCount + 1}
+    style={{ textAlign: "center", verticalAlign: "middle" }}
+  >
+    <big>{loading ? <CircularProgress size={28} /> : <span>No data</span>}</big>
+  </td>
+);

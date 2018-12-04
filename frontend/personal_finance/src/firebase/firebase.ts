@@ -1,5 +1,6 @@
 import firebase, { firestore } from "firebase";
 import { User } from "../models/user";
+import { Row } from "../components/ExpensesTable/ExpensesTable";
 
 const config = {
   apiKey: "AIzaSyAFTpHYAgEZ6UxgAs4oJZq-N5cYtxXcIa4",
@@ -22,7 +23,7 @@ class Firebase {
 
   // *** Auth API ***
   public doSignInWithGoogle = () =>
-    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
   public doSignOut = () => this.auth.signOut();
 
@@ -31,14 +32,28 @@ class Firebase {
     this.db
       .collection("users")
       .doc(user.uid)
-      .set(user)
+      .set(user);
 
   public getUser = (uid: string) =>
     this.db
       .collection("users")
       .doc(uid)
       .get()
-      .then(doc => doc.data())
+      .then(doc => doc.data());
+
+  /// *** Economy API ***
+  public setBudget = (uid: string, budget: Row[]) =>
+    this.db
+      .collection("budgets")
+      .doc(uid)
+      .set({ budget });
+
+  public getBudget = (uid: string) =>
+    this.db
+      .collection("budgets")
+      .doc(uid)
+      .get()
+      .then(doc => doc.data());
 }
 
 export default Firebase;

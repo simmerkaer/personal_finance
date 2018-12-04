@@ -26,7 +26,7 @@ class SignIn extends React.Component<SignInProps, any> {
       });
 
     history.push("/profile");
-  }
+  };
 
   public render() {
     return (

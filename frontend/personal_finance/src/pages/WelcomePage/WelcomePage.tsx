@@ -15,7 +15,7 @@ class WelcomePage extends React.Component<WelcomePageProps, any> {
     return (
       <>
         <div>Welcome {authUser.email}!</div>
-        <Avatar alt={authUser.displayName} src={photoUrl} />
+        <Avatar src={photoUrl} />
       </>
     );
   }

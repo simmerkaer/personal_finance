@@ -4,12 +4,17 @@ import AuthUserContext from "./context";
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 type Subtract<T, K> = Omit<T, keyof K>;
 
-interface InjectedProps {
+export interface InjectedAuthUserProps {
   authUser: firebase.User | null;
 }
 
-const withAuthUser = <P extends InjectedProps>(Component: ComponentType<P>) =>
-  class WithAuthUser extends React.Component<Subtract<P, InjectedProps>, {}> {
+const withAuthUser = <P extends InjectedAuthUserProps>(
+  Component: ComponentType<P>
+) =>
+  class WithAuthUser extends React.Component<
+    Subtract<P, InjectedAuthUserProps>,
+    {}
+  > {
     public render() {
       return (
         <AuthUserContext.Consumer>
