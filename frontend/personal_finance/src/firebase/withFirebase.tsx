@@ -6,7 +6,7 @@ type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 type Subtract<T, K> = Omit<T, keyof K>;
 
 export interface InjectedFirebaseProps {
-  firebase: Firebase | null;
+  firebase: Firebase;
 }
 
 const withFirebase = <P extends InjectedFirebaseProps>(

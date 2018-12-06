@@ -42,18 +42,31 @@ class Firebase {
       .then(doc => doc.data());
 
   /// *** Economy API ***
-  public setBudget = (uid: string, budget: Row[]) =>
+  public setExpenses = (uid: string, budget: Row[]) =>
     this.db
       .collection("budgets")
       .doc(uid)
-      .set({ budget });
+      .set({ budget }, { merge: true });
 
-  public getBudget = (uid: string) =>
+  public getExpenses = (uid: string) =>
     this.db
       .collection("budgets")
       .doc(uid)
       .get()
       .then(doc => doc.data());
+
+  public setIncome = (uid: string, income: number) =>
+    this.db
+      .collection("budgets")
+      .doc(uid)
+      .set({ income }, { merge: true });
+
+  public getIncome = (uid: string) => {
+    this.db
+      .collection("budgets")
+      .doc(uid)
+      .get();
+  };
 }
 
 export default Firebase;

@@ -9,6 +9,7 @@ import { withFirebase } from "../../firebase";
 import { InjectedFirebaseProps } from "../../firebase/withFirebase";
 import { withAuthUser } from "../../session";
 import { InjectedAuthUserProps } from "../../session/withAuthUser";
+import IncomeInput from "../../components/IncomeInput/IncomeInput";
 
 interface EconomyPageState {
   rows: Row[];
@@ -32,7 +33,7 @@ class EconomyPage extends React.Component<
     if (!firebase || !authUser) return;
 
     this.setState({ loading: true });
-    const budgetObject = await firebase.getBudget(authUser.uid);
+    const budgetObject = await firebase.getExpenses(authUser.uid);
 
     if (!budgetObject) return;
     const rows: Row[] = budgetObject.budget;
@@ -67,7 +68,7 @@ class EconomyPage extends React.Component<
       rows = rows.filter(row => !deletedSet.has(row.id));
     }
     this.setState({ rows });
-    firebase.setBudget(authUser.uid, rows);
+    firebase.setExpenses(authUser.uid, rows);
   };
 
   calculateTotalExpenses = (rows: Row[]) => {
@@ -81,6 +82,7 @@ class EconomyPage extends React.Component<
       <div>
         <Grid container spacing={16}>
           <Grid item xs={6}>
+            <IncomeInput />
             <ExpensesTable
               rows={rows}
               commitChanges={this.commitChanges}

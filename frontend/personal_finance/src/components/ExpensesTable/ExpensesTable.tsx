@@ -12,9 +12,7 @@ import {
   TableEditRow,
   TableEditColumn
 } from "@devexpress/dx-react-grid-material-ui";
-import { withFirebase } from "../../firebase";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { InjectedFirebaseProps } from "../../firebase/withFirebase";
 
 const getRowId = row => row.id;
 
@@ -24,7 +22,7 @@ export interface Row {
   money: string;
 }
 
-interface ExpensesTableProps extends InjectedFirebaseProps {
+interface ExpensesTableProps {
   rows: Row[];
   loading: boolean;
   commitChanges: any;
@@ -85,7 +83,7 @@ class ExpensesTable extends React.Component<
   }
 }
 
-export default withFirebase(ExpensesTable);
+export default ExpensesTable;
 
 const LoadingState = ({ loading, columnCount }) => (
   <td
