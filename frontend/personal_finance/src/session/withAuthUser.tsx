@@ -5,7 +5,7 @@ type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 type Subtract<T, K> = Omit<T, keyof K>;
 
 export interface InjectedAuthUserProps {
-  authUser: firebase.User | null;
+  authUser: firebase.User;
 }
 
 const withAuthUser = <P extends InjectedAuthUserProps>(
@@ -18,7 +18,9 @@ const withAuthUser = <P extends InjectedAuthUserProps>(
     public render() {
       return (
         <AuthUserContext.Consumer>
-          {authUser => <Component authUser={authUser} {...this.props} />}
+          {authUser =>
+            authUser ? <Component authUser={authUser} {...this.props} /> : null
+          }
         </AuthUserContext.Consumer>
       );
     }

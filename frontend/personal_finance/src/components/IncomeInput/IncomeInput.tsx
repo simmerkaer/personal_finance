@@ -1,41 +1,33 @@
 import * as React from "react";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Firebase, { withFirebase } from "../../firebase";
+import { withFirebase } from "../../firebase";
 import { InjectedFirebaseProps } from "../../firebase/withFirebase";
+import TextField from "@material-ui/core/TextField";
+import { compose } from "recompose";
+import { withAuthUser } from "../../session";
+import { InjectedAuthUserProps } from "../../session/withAuthUser";
 
-interface IncomeInputProps extends InjectedFirebaseProps {
-  test: string;
-}
-interface IncomeInputState {
+interface IncomeInputProps {
   income: number;
+  handleChange: any;
 }
 
-class IncomeInput extends React.Component<IncomeInputProps, IncomeInputState> {
-  constructor(props) {
-    super(props);
-    this.state = { income: 0 };
-  }
-
-  handleChange = event => {
-    this.setState({ income: event.target.value });
-  };
-
+export default class IncomeInput extends React.Component<IncomeInputProps, {}> {
   public render() {
+    const { income, handleChange } = this.props;
     return (
-      <FormControl fullWidth>
-        <InputLabel htmlFor="adornment-amount">Monthly income</InputLabel>
-        <Input
-          id="adornment-amount"
-          value={this.state.income}
-          onChange={this.handleChange}
-          endAdornment={<InputAdornment position="end">kr.</InputAdornment>}
-        />
-      </FormControl>
+      <TextField
+        id="outlined-name"
+        fullWidth
+        label="Monthly income"
+        value={income}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+        InputProps={{
+          endAdornment: <InputAdornment position="end">kr.</InputAdornment>
+        }}
+      />
     );
   }
 }
-
-export default withFirebase(IncomeInput);

@@ -48,7 +48,7 @@ class Firebase {
       .doc(uid)
       .set({ budget }, { merge: true });
 
-  public getExpenses = (uid: string) =>
+  public getBudget = (uid: string) =>
     this.db
       .collection("budgets")
       .doc(uid)

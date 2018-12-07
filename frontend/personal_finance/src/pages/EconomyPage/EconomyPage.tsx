@@ -10,9 +10,11 @@ import { InjectedFirebaseProps } from "../../firebase/withFirebase";
 import { withAuthUser } from "../../session";
 import { InjectedAuthUserProps } from "../../session/withAuthUser";
 import IncomeInput from "../../components/IncomeInput/IncomeInput";
+import { number } from "prop-types";
 
 interface EconomyPageState {
   rows: Row[];
+  income: number;
   loading: boolean;
 }
 
@@ -24,29 +26,35 @@ class EconomyPage extends React.Component<
     super(props);
     this.state = {
       rows: [],
+      income: 0,
       loading: false
     };
   }
 
   async componentDidMount() {
     const { firebase, authUser } = this.props;
-    if (!firebase || !authUser) return;
 
     this.setState({ loading: true });
-    const budgetObject = await firebase.getExpenses(authUser.uid);
-
+    const budgetObject = await firebase.getBudget(authUser.uid);
     if (!budgetObject) return;
-    const rows: Row[] = budgetObject.budget;
+
+    const { budget, income } = budgetObject;
     this.setState({
-      rows: rows,
+      rows: budget,
+      income,
       loading: false
     });
   }
 
+  handleIncomeChange = event => {
+    const { firebase, authUser } = this.props;
+    this.setState({ income: event.target.value });
+    firebase.setIncome(authUser.uid, event.target.value);
+  };
+
   commitChanges = ({ added, changed, deleted }) => {
     let { rows } = this.state;
     let { firebase, authUser } = this.props;
-    if (!firebase || !authUser) return;
     if (added) {
       const startingAddedId =
         rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
@@ -76,13 +84,16 @@ class EconomyPage extends React.Component<
   };
 
   public render() {
-    const { rows, loading } = this.state;
+    const { rows, income, loading } = this.state;
     const totalExpenses = this.calculateTotalExpenses(rows);
     return (
       <div>
         <Grid container spacing={16}>
           <Grid item xs={6}>
-            <IncomeInput />
+            <IncomeInput
+              handleChange={this.handleIncomeChange}
+              income={income}
+            />
             <ExpensesTable
               rows={rows}
               commitChanges={this.commitChanges}
@@ -90,7 +101,11 @@ class EconomyPage extends React.Component<
             />
           </Grid>
           <Grid item xs={6}>
-            Total expenses: {totalExpenses} kr.
+            Monthly income: {income} kr.
+            <br />
+            Monthly expenses: {totalExpenses} kr.
+            <br />
+            Left-over: {income - totalExpenses} kr.
           </Grid>
         </Grid>
       </div>
