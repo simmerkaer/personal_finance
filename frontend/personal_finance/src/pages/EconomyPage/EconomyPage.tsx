@@ -52,33 +52,6 @@ class EconomyPage extends React.Component<
     firebase.setIncome(authUser.uid, event.target.value);
   };
 
-  commitChanges = ({ added, changed, deleted }) => {
-    let { rows } = this.state;
-    let { firebase, authUser } = this.props;
-    if (added) {
-      const startingAddedId =
-        rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-      rows = [
-        ...rows,
-        ...added.map((row, index) => ({
-          id: startingAddedId + index,
-          ...row
-        }))
-      ];
-    }
-    if (changed) {
-      rows = rows.map(row =>
-        changed[row.id] ? { ...row, ...changed[row.id] } : row
-      );
-    }
-    if (deleted) {
-      const deletedSet = new Set(deleted);
-      rows = rows.filter(row => !deletedSet.has(row.id));
-    }
-    this.setState({ rows });
-    firebase.setExpenses(authUser.uid, rows);
-  };
-
   calculateTotalExpenses = (rows: Row[]) => {
     return rows.reduce((total: number, row: Row) => total + +row.money, 0);
   };
@@ -94,11 +67,7 @@ class EconomyPage extends React.Component<
               handleChange={this.handleIncomeChange}
               income={income}
             />
-            <ExpensesTable
-              rows={rows}
-              commitChanges={this.commitChanges}
-              loading={loading}
-            />
+            <ExpensesTable rows={rows} loading={loading} />
           </Grid>
           <Grid item xs={6}>
             Monthly income: {income} kr.
