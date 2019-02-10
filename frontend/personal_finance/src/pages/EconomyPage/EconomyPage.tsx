@@ -3,18 +3,18 @@ import withAuthorization from "../../firebase/withAuthorization";
 import ExpensesTable, {
   Row
 } from "../../components/ExpensesTable/ExpensesTable";
-import { Grid } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { compose } from "recompose";
 import { withFirebase } from "../../firebase";
 import { InjectedFirebaseProps } from "../../firebase/withFirebase";
 import { withAuthUser } from "../../session";
 import { InjectedAuthUserProps } from "../../session/withAuthUser";
-import IncomeInput from "../../components/IncomeInput/IncomeInput";
-import { number } from "prop-types";
+import TextField from "@material-ui/core/TextField";
+import AddExpense from "../../components/AddExpense";
 
 interface EconomyPageState {
-  rows: Row[];
-  income: number;
+  expenses: Row[];
+  totalExpenses: number;
   loading: boolean;
 }
 
@@ -25,8 +25,8 @@ class EconomyPage extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-      rows: [],
-      income: 0,
+      expenses: [],
+      totalExpenses: 0,
       loading: false
     };
   }
@@ -35,46 +35,61 @@ class EconomyPage extends React.Component<
     const { firebase, authUser } = this.props;
 
     this.setState({ loading: true });
-    const budgetObject = await firebase.getBudget(authUser.uid);
-    if (!budgetObject) return;
+    const expensesObject = await firebase.getExpenses(authUser.uid);
+    if (!expensesObject) return;
 
-    const { budget, income } = budgetObject;
+    const { expenses, totalExpenses } = expensesObject;
     this.setState({
-      rows: budget,
-      income,
+      expenses,
+      totalExpenses,
       loading: false
     });
   }
 
-  handleIncomeChange = event => {
+  // handleIncomeChange = event => {
+  //   const { firebase, authUser } = this.props;
+  //   this.setState({ totalExpenses: event.target.value });
+  //   firebase.setIncome(authUser.uid, event.target.value);
+  // };
+
+  addExpense = (text: string, amount: number) => {
     const { firebase, authUser } = this.props;
-    this.setState({ income: event.target.value });
-    firebase.setIncome(authUser.uid, event.target.value);
+
+    firebase.addExpense(authUser.uid, text, amount);
+
+    this.setState(prevState => ({
+      expenses: [...prevState.expenses, { text, amount }]
+    }));
   };
 
-  calculateTotalExpenses = (rows: Row[]) => {
-    return rows.reduce((total: number, row: Row) => total + +row.money, 0);
+  deleteRow = (row: Row) => {
+    const { firebase, authUser } = this.props;
+
+    firebase.deleteExpense(authUser.uid, row);
+
+    this.setState(prevState => ({
+      expenses: prevState.expenses.filter(x => x.text !== row.text)
+    }));
   };
 
   public render() {
-    const { rows, income, loading } = this.state;
-    const totalExpenses = this.calculateTotalExpenses(rows);
+    const { expenses, totalExpenses } = this.state;
     return (
       <div>
         <Grid container spacing={16}>
           <Grid item xs={6}>
-            <IncomeInput
-              handleChange={this.handleIncomeChange}
-              income={income}
-            />
-            <ExpensesTable rows={rows} loading={loading} />
+            <Typography variant="h4" gutterBottom>
+              Monthly expenses
+            </Typography>
+            <ExpensesTable rows={expenses} deleteRow={this.deleteRow} />
+            <AddExpense addExpense={this.addExpense} />
           </Grid>
           <Grid item xs={6}>
-            Monthly income: {income} kr.
+            Monthly income: {totalExpenses} kr.
             <br />
             Monthly expenses: {totalExpenses} kr.
             <br />
-            Left-over: {income - totalExpenses} kr.
+            Left-over: {totalExpenses - totalExpenses} kr.
           </Grid>
         </Grid>
       </div>

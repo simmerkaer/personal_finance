@@ -28,11 +28,19 @@ class Firebase {
   public doSignOut = () => this.auth.signOut();
 
   // *** User API ***
-  public createUser = (user: User) =>
+  public createUser = (user: User) => {
     this.db
       .collection("users")
       .doc(user.uid)
       .set(user);
+
+    this.db
+      .collection("budgets")
+      .doc(user.uid)
+      .set({
+        expenses: []
+      });
+  };
 
   public getUser = (uid: string) =>
     this.db
@@ -42,13 +50,25 @@ class Firebase {
       .then(doc => doc.data());
 
   /// *** Economy API ***
-  public setExpenses = (uid: string, budget: Row[]) =>
+  public addExpense = (uid: string, text: string, amount: number) => {
     this.db
       .collection("budgets")
       .doc(uid)
-      .set({ budget }, { merge: true });
+      .update({
+        expenses: firebase.firestore.FieldValue.arrayUnion({ text, amount })
+      });
+  };
 
-  public getBudget = (uid: string) =>
+  public deleteExpense = (uid: string, expense: Row) => {
+    this.db
+      .collection("budgets")
+      .doc(uid)
+      .update({
+        expenses: firebase.firestore.FieldValue.arrayRemove(expense)
+      });
+  };
+
+  public getExpenses = (uid: string) =>
     this.db
       .collection("budgets")
       .doc(uid)

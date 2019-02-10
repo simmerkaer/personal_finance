@@ -1,20 +1,21 @@
 import * as React from "react";
-import Paper from "@material-ui/core/Paper";
-import {
-  EditingState,
-  Column,
-  DataTypeProvider
-} from "@devexpress/dx-react-grid";
+import { Column } from "@devexpress/dx-react-grid";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Divider from "@material-ui/core/Divider/Divider";
 
 export interface Row {
-  id: number;
-  name: string;
-  money: string;
+  text: string;
+  amount: number;
 }
 
 interface ExpensesTableProps {
   rows: Row[];
-  loading: boolean;
+  deleteRow: (row: Row) => void;
 }
 
 interface ExpensesTableState {
@@ -25,27 +26,36 @@ class ExpensesTable extends React.Component<
   ExpensesTableProps,
   ExpensesTableState
 > {
-  constructor(props: ExpensesTableProps) {
-    super(props);
-
-    this.state = {
-      columns: [
-        {
-          name: "name",
-          title: "Name"
-        },
-        {
-          name: "money",
-          title: "Money"
-        }
-      ]
-    };
-  }
+  createRow = (x, i) => (
+    <ListItem button divider key={i}>
+      <ListItemText primary={x.text} />
+      <ListItemText primary={`${x.amount} kr.`} />
+      <ListItemSecondaryAction style={{ maxWidth: 50 }}>
+        <IconButton
+          aria-label="Delete"
+          onClick={this.props.deleteRow.bind(this, x)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
 
   render() {
-    const { rows, loading } = this.props;
-    const { columns } = this.state;
-    return <div>test</div>;
+    let { rows } = this.props;
+    let total = rows.reduce((acc, row) => acc + +row.amount, 0);
+    return (
+      <div>
+        <List>
+          {rows.map(this.createRow)}
+          <Divider />
+          <ListItem>
+            <ListItemText primary={"Total"} />
+            <ListItemText primary={`${total} kr.`} />
+          </ListItem>
+        </List>
+      </div>
+    );
   }
 }
 
